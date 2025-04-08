@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('applicant_attachments', function (Blueprint $table) {
             $table->id();
-            
+
             // Foreign Keys
             $table->foreignId('applicant_id')->constrained('applicants')->onDelete('cascade');
             $table->foreignId('request_id')->constrained('requests')->onDelete('cascade');
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('file_path', 255);
             // التواريخ
             $table->timestamp('uploaded_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
