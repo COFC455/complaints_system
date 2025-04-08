@@ -54,4 +54,11 @@ public function trackings(): HasMany
     return $this->hasMany(Tracking::class, 'request_id', 'id');
 }
 
+//ApplicantAttachment
+
+public function applicant_attachments(): HasMany
+{
+    return $this->hasMany(ApplicantAttachment::class);
+}
+
 }

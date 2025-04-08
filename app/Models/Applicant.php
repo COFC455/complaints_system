@@ -10,13 +10,21 @@ class Applicant extends Model
         'full_name',
         'email',
         'phone',
-        'national_id'
+        'mobile_phone',
+        'national_id',
+        'address',
+
     ];
 
 
     public function requests(): HasMany
     {
         return $this->hasMany(Request::class);
+    }
+
+    public function applicantAttachments(): HasMany
+    {
+        return $this->hasMany(ApplicantAttachment::class);
     }
 
 }

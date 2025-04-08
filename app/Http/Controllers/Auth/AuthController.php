@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\User\UserResource;
 
 
 class AuthController extends Controller
@@ -33,9 +34,13 @@ class AuthController extends Controller
         }
 
         $user = Auth::guard('api')->user();
+       
+        $user->with(['role','branch'])->get();
+
+
         return response()->json([
                 'status' => 'success',
-                'user' => $user,
+                'user' =>   new UserResource($user),
                 'authorisation' => [
                     'token' => $token,
                     'type' => 'bearer',
@@ -50,19 +55,25 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
+            'phone'=> 'required|string',
+            'role_id' => 'required|exists:roles,id',
+            'branch_id' => 'required|exists:branches,id',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone'=> $request->phone,
+            'role_id' => $request->role_id,
+            'branch_id' => $request->branch_id,
         ]);
 
         $token = Auth::guard('api')->login($user);
         return response()->json([
             'status' => 'success',
             'message' => 'User created successfully',
-            'user' => $user,
+            'user' =>   new UserResource($user),
             'authorisation' => [
                 'token' => $token,
                 'type' => 'bearer',

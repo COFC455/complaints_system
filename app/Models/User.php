@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -23,6 +24,9 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'phone',
+        'role_id',
+        'branch_id'
     ];
 
     /**
@@ -81,5 +85,16 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Tracking::class, 'updated_by');
     }
+
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branche::class, 'branch_id', 'id');
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class , 'role_id' , 'id');
+    }
+
 
 }

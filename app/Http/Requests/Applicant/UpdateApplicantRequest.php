@@ -25,6 +25,8 @@ class UpdateApplicantRequest extends FormRequest
             'full_name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|unique:applicants,email,' . $this->applicant->id,
             'phone' => 'sometimes|string|max:20',
+            'mobile_phone' => 'sometimes|string|max:20',
+            'address' => 'sometimes|string',
             // القاعدة تمنع تكرار الـ national_id في أي سجل ماعدا السجل الحالي الذي يتم تعديله.
             'national_id' => 'sometimes|string|unique:applicants,national_id,' . $this->applicant->id . '|max:20',
         ];

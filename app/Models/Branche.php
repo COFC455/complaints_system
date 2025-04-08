@@ -16,4 +16,10 @@ class Branche extends Model
     {
         return $this->hasMany(Request::class);
     }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+    
 }

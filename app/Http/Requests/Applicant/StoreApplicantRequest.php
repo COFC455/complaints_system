@@ -23,8 +23,10 @@ class StoreApplicantRequest extends FormRequest
     {
         return [
             'full_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:applicants,email',
+            'email' => 'required|email',
             'phone' => 'required|string|max:20',
+            'mobile_phone' => 'required|string|max:20',
+            'address' => 'required|string',
             'national_id' => 'required|string|unique:applicants,national_id|max:50',
         ];
     }

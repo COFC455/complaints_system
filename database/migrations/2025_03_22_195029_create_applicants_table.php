@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->string('full_name', 255);
-            $table->string('email', 255)->unique();
+            $table->string('email', 255);
             $table->string('phone', 20);
+            $table->string('mobile_phone', 20);
+            $table->string('address');
             $table->string('national_id', 50)->unique()->index();
             $table->timestamps();
         });

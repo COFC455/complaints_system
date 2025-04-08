@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Resources\Applicant;
+namespace App\Http\Resources\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Role\RoleResource;
+use App\Http\Resources\Branch\BranchResource;
 
-class ApplicantResource extends JsonResource
+class UserResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +18,11 @@ class ApplicantResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'full_name' => $this->full_name,
+            'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'mobile_phone' => $this->mobile_phone,
-            'address' => $this->address,
-            'national_id' => $this->national_id,
+            'role' => new RoleResource($this->role),
+            'branch' => new BranchResource($this->branch),
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }
