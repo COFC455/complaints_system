@@ -53,3 +53,10 @@ Route::apiResource('trakings', TrakingController::class);
 
 //Role
 Route::apiResource('roles', RoleController::class);
+
+
+Route::get('/requests/attachments/by-name/{name}', [RequestController::class, 'getAttachmentsByApplicantName']);
+
+
+//update status request
+Route::patch('/requests/{request}/status', [RequestController::class, 'updateStatus']);

@@ -28,4 +28,16 @@ class Applicant extends Model
         return $this->hasMany(ApplicantAttachment::class);
     }
 
+    public function attachments()
+    {
+        return $this->hasManyThrough(
+            ApplicantAttachment::class,
+            Request::class,
+            'applicant_id', // Foreign key on requests table
+            'request_id',   // Foreign key on applicant_attachments table
+            'id',           // Local key on applicants table
+            'id'            // Local key on requests table
+        );
+    }
+
 }

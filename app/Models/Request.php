@@ -14,6 +14,7 @@ class Request extends Model
         'branch_id',
         'request_type_id',
         'request_status_id',
+        'status',
         'description',
         'reference_code'
     ];
