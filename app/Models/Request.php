@@ -14,6 +14,7 @@ class Request extends Model
         'branch_id',
         'request_type_id',
         'request_status_id',
+        'city_id',
         'status',
         'description',
         'reference_code'
@@ -36,6 +37,12 @@ public function category(): BelongsTo
 public function branch(): BelongsTo
 {
     return $this->belongsTo(Branche::class);
+}
+
+//city
+public function city(): BelongsTo
+{
+    return $this->belongsTo(City::class);
 }
 
 //request_type

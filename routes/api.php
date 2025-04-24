@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ReportController;
@@ -60,3 +61,6 @@ Route::get('/requests/attachments/by-name/{name}', [RequestController::class, 'g
 
 //update status request
 Route::patch('/requests/{request}/status', [RequestController::class, 'updateStatus']);
+
+//city
+Route::apiResource('cities', CityController::class);

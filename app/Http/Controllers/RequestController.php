@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\{Request,Applicant,ApplicantAttachment};
+use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Str;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Request\RequestStore;
 use App\Http\Requests\Request\RequestUpdate;
-use App\Http\Requests\Request\CheckSatusRequest;
 use App\Http\Resources\Request\RequestResource;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Models\{Request,Applicant,ApplicantAttachment};
+use App\Http\Requests\Request\CheckSatusRequest;
 
 
 class RequestController extends Controller
@@ -20,10 +22,33 @@ class RequestController extends Controller
         $this->middleware('auth:api', [ 'expect' => ['index' , 'show','store']]);
     }
 
-    public function index(): JsonResponse
+    // public function index(): JsonResponse
+    // {
+
+    //     // $requests = Request::with(['applicant', 'category', 'branch', 'request_type', 'request_status','applicant_attachments'])->paginate(10);
+    //     // return RequestResource::collection($requests)->response();
+
+    // }
+
+    public function index(HttpRequest $httpRequest)
     {
-        $requests = Request::with(['applicant', 'category', 'branch', 'request_type', 'request_status','applicant_attachments'])->paginate(10);
-        return RequestResource::collection($requests)->response();
+        $query = Request::query();
+
+        // الفلترة حسب request_type (request_type_id)
+        if ($httpRequest->has('request_type')) {
+            $query->where('request_type_id', $httpRequest->input('request_type'));
+        }
+
+        // الفلترة حسب request_status (request_status_id)
+        if ($httpRequest->has('request_status')) {
+            $query->where('request_status_id', $httpRequest->input('request_status'));
+        }
+
+        // جلب النتائج مع العلاقات (اختياري)
+        $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city'])
+                         ->get();
+
+        return response()->json($requests);
     }
 
     /**
@@ -32,19 +57,38 @@ class RequestController extends Controller
     public function store(RequestStore $request): JsonResponse
     {
 
-        // 1. حفظ بيانات مقدم الطلب (Applicant)
-        $applicant = Applicant::create($request->input('applicant'));
+         // تحويل الـ JSON إلى مصفوفة
+        $jsonData = json_decode($request->input('data'), true);
 
-        // 2. حفظ بيانات الطلب (Request)
-        $requestData = $applicant->requests()->create([
-            // 'applicant_id' => $applicant->id,
-            'category_id' => $request->input('request.category_id'),
-            'branch_id' => $request->input('request.branch_id'),
-            'request_type_id' => $request->input('request.request_type_id'),
-            'request_status_id' =>$request->input('request.request_status_id'), // حالة افتراضية
-            'description' => $request->input('request.description'),
-            'reference_code' => $request->input('request.reference_code'),
+          // تحقق من صحة الحقول الداخلية
+        $validator = Validator::make($jsonData, [
+             // بيانات مقدم الطلب (applicants)
+             'applicant.full_name' => 'required|string|max:255',
+             'applicant.email' => 'required|email',
+             'applicant.phone' => 'required|string|max:20',
+             'applicant.mobile_phone' => 'required|string|max:20',
+             'applicant.address' => 'required|string',
+             'applicant.national_id' => 'required|string|unique:applicants,national_id|max:50',
+
+             // بيانات الطلب (requests)
+             'request.category_id' => 'required|exists:categories,id',
+             'request.branch_id' => 'required|exists:branches,id',
+             'request.request_type_id' => 'required|exists:request_types,id',
+             'request.request_status_id' => 'required|exists:request_statuses,id',
+             'request.city_id' => 'required|exists:cities,id',
+             'request.description' => 'required|string|max:500',
+             'request.reference_code' => 'required|max:50',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+         // 1. حفظ بيانات مقدم الطلب
+        $applicant = Applicant::create($jsonData['applicant']);
+
+        // 2. حفظ بيانات الطلب
+        $requestData = $applicant->requests()->create($jsonData['request']);
 
         // 3. حفظ المرفقات (Attachments)
        // تخزين الملفات
@@ -97,7 +141,7 @@ class RequestController extends Controller
      */
     public function update(RequestUpdate $request, string $id): JsonResponse
     {
-        
+
         $existingRequest = Request::with('applicant_attachments')->findOrFail($id);
 
         // 1. تحديث بيانات مقدم الطلب (Applicant)
@@ -157,7 +201,7 @@ class RequestController extends Controller
     }
 
 
-  
+
     public function getAttachmentsByApplicantName(string $name): JsonResponse
     {
         // البحث عن المواطنين الذين يتطابق اسمهم مع الاسم المطلوب
@@ -188,7 +232,7 @@ class RequestController extends Controller
     }
 
 
-    //update status 
+    //update status
 
     public function updateStatus(CheckSatusRequest $request, $id)
         {
@@ -207,5 +251,5 @@ class RequestController extends Controller
                 'data' => new RequestResource($requestModel),
             ]);
     }
-   
+
 }

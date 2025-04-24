@@ -31,6 +31,11 @@ class RequestResource extends JsonResource
             'id' => $this->branch->id ?? null,
             'name' => $this->branch->branch_name ?? 'غير محدد',
         ],
+        // المحافظة
+        'city' => [
+            'id' => $this->city->id ?? null,
+            'name' => $this->city->city_name ?? 'غير محدد',
+        ],
         // نوع الطلب
         'request_type' => [
             'id' => $this->request_type->id ?? null,

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->foreignId('request_type_id')->constrained('request_types')->onDelete('cascade');
             $table->foreignId('request_status_id')->constrained('request_statuses')->onDelete('cascade');
+            $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('description');
             $table->string('reference_code', 50);

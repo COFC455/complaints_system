@@ -4,7 +4,7 @@ namespace App\Http\Requests\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use App\Models\Request; 
+use App\Models\Request;
 
 
 class RequestUpdate extends FormRequest
@@ -53,6 +53,7 @@ class RequestUpdate extends FormRequest
             'request.branch_id' => 'sometimes|exists:branches,id',
             'request.request_type_id' => 'sometimes|exists:request_types,id',
             'request.request_status_id' => 'sometimes|exists:request_statuses,id',
+            'request.city_id' => 'sometimes|exists:cities,id',
             'request.description' => 'sometimes|string|max:500',
             'request.reference_code' => 'sometimes|max:50',
 
