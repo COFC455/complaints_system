@@ -58,6 +58,7 @@ Route::apiResource('roles', RoleController::class);
 
 Route::get('/requests/attachments/by-name/{name}', [RequestController::class, 'getAttachmentsByApplicantName']);
 
+Route::get('requests/getRequestByReferenceCode/{reference_code}', [RequestController::class, 'getRequestByReferenceCode']);
 
 //update status request
 Route::patch('/requests/{request}/status', [RequestController::class, 'updateStatus']);

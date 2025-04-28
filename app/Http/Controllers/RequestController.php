@@ -19,7 +19,7 @@ class RequestController extends Controller
 {
 
     public function _construct() {
-        $this->middleware('auth:api', [ 'expect' => ['index' , 'show','store']]);
+        $this->middleware('auth:api', [ 'expect' => ['index' , 'show','store','getRequestByReferenceCode']]);
     }
 
     // public function index(): JsonResponse
@@ -251,5 +251,27 @@ class RequestController extends Controller
                 'data' => new RequestResource($requestModel),
             ]);
     }
+
+
+    public function getRequestByReferenceCode($reference_code)
+    {
+        // البحث عن الطلب باستخدام reference_code
+        $request = Request::with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city', 'applicant_attachments'])
+                        ->where('reference_code', $reference_code)
+                        ->first();
+
+        if (!$request) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $request
+        ]);
+    }
+
 
 }
