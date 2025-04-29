@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Request\RequestStore;
-use App\Http\Requests\Request\RequestUpdate;
+use App\Http\Requests\Request\{RequestUpdate,StoreOnlyRequest};
 use App\Http\Resources\Request\RequestResource;
 use App\Models\{Request,Applicant,ApplicantAttachment};
 use App\Http\Requests\Request\CheckSatusRequest;
@@ -44,11 +44,29 @@ class RequestController extends Controller
             $query->where('request_status_id', $httpRequest->input('request_status'));
         }
 
+         // الفلترة حسب category (category_id)
+         if ($httpRequest->has('category')) {
+            $query->where('category_id', $httpRequest->input('category'));
+        }
+
+         // الفلترة حسب request_status (branch_id)
+         if ($httpRequest->has('branch')) {
+            $query->where('branch_id', $httpRequest->input('branch'));
+        }
+
         // جلب النتائج مع العلاقات (اختياري)
         $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city'])
-                         ->get();
+                         ->paginate(10);
 
         return response()->json($requests);
+    }
+
+
+    public function storeOnly(StoreOnlyRequest $request): JsonResponse
+    {
+        $request = Request::create($request->validated());
+        return (new RequestResource($request))->response()->setStatusCode(201);
+
     }
 
     /**

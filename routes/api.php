@@ -63,5 +63,9 @@ Route::get('requests/getRequestByReferenceCode/{reference_code}', [RequestContro
 //update status request
 Route::patch('/requests/{request}/status', [RequestController::class, 'updateStatus']);
 
+
+//store only request
+Route::post('/requestOnly', [RequestController::class, 'storeOnly']);
+
 //city
 Route::apiResource('cities', CityController::class);
