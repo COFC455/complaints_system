@@ -55,6 +55,19 @@ class RequestResource extends JsonResource
             ];
         }) ?? [],
 
+        //tracking
+        'trackings' => $this->trackings->map(function ($tracking) {
+            return [
+                'id' => $tracking->id,
+                'comment' => $tracking->comment,
+                'status' => $tracking->request_status->status_name ?? 'غير محدد',
+                'updated_by' => [
+                    'id' => $tracking->updatedByUser->id ?? null,
+                    'name' => $tracking->updatedByUser->name ?? 'غير معروف',
+                ],
+                'created_at' => $tracking->created_at->toDateTimeString(),
+            ];
+        }) ?? [],
             'description' => $this->description,
             'reference_code' => $this->reference_code,
             'created_at' => $this->created_at->toDateTimeString(),

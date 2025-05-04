@@ -56,7 +56,7 @@ Route::apiResource('trakings', TrakingController::class);
 Route::apiResource('roles', RoleController::class);
 
 
-Route::get('/requests/attachments/by-name/{name}', [RequestController::class, 'getAttachmentsByApplicantName']);
+Route::get('/requests/attachments/by-id/{id}', [RequestController::class, 'getAttachmentsByApplicantId']);
 
 Route::get('requests/getRequestByReferenceCode/{reference_code}', [RequestController::class, 'getRequestByReferenceCode']);
 

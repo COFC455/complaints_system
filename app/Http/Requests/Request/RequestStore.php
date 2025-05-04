@@ -15,10 +15,10 @@ class RequestStore extends FormRequest
     {
         return [
 
-           'data' => 'required|json',
-            // المرفقات (attachments)
-            'attachments.*' => 'required|file|mimes:pdf,jpg,png|max:2048',
-        ];
+            'data' => 'required|json',
+             // المرفقات (attachments)
+             'attachments.*' => 'required|file|mimes:pdf,jpg,png|max:2048',
+         ];
     }
 
 
