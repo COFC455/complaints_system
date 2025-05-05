@@ -14,9 +14,10 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-       $roles = Role::paginate(10);
+       $perPage = $request->input('per_page', 10);
+       $roles = Role::paginate($perPage);
        return RoleResource::collection($roles)->response();
     }
 

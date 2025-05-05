@@ -15,12 +15,12 @@ class RequestStatusController extends Controller
     public function __construct() {
         $this->middleware('auth:api', ['except' => ['index' , 'show']]);
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index() : JsonResponse
+  
+
+    public function index(Request $request) : JsonResponse
     {
-        $request_statues = RequestStatus::paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $request_statues = RequestStatus::paginate($perPage);
 
         return RequestStatusResource::collection($request_statues)->response();
     }

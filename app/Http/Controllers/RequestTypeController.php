@@ -23,9 +23,10 @@ class RequestTypeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() : JsonResponse
+    public function index(Request $request) : JsonResponse
     {
-       $request_types = request_types::paginate(10);
+        $perPage = $request->input('per_page', 10);
+       $request_types = request_types::paginate($perPage);
        return RequestTypeResource::collection($request_types)->response();
 
     }

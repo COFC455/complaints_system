@@ -19,11 +19,12 @@ class ReportController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
 
     {
 
-        $reports = Report::with('generatedUser')->paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $reports = Report::with('generatedUser')->paginate( $perPage);
 
         return ReportResource::collection($reports)->response();
 

@@ -18,9 +18,10 @@ class CityController extends Controller
     }
 
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $cities = City::paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $cities = City::paginate($perPage);
         return CityResource::collection($cities)->response();
     }
 

@@ -21,9 +21,11 @@ class BranchController extends Controller
    /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $branchs = Branche::paginate(10);
+
+        $perPage = $request->input('per_page', 10);
+        $branchs = Branche::paginate($perPage);
         return BranchResource::collection($branchs)->response();
     }
 

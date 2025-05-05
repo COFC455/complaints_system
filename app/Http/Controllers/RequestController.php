@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Request\RequestStore;
 use App\Http\Requests\Request\{RequestUpdate,StoreOnlyRequest};
 use App\Http\Resources\Request\RequestResource;
-use App\Models\{Request,Applicant,ApplicantAttachment};
+use App\Models\Request as RequestModel;
+use App\Models\{Applicant,ApplicantAttachment};
 use App\Http\Requests\Request\CheckSatusRequest;
 
 
@@ -32,7 +33,7 @@ class RequestController extends Controller
 
     public function index(HttpRequest $httpRequest)
     {
-        $query = Request::query();
+        $query = RequestModel::query();
 
         // الفلترة حسب request_type (request_type_id)
         if ($httpRequest->has('request_type')) {
@@ -53,12 +54,13 @@ class RequestController extends Controller
          if ($httpRequest->has('branch')) {
             $query->where('branch_id', $httpRequest->input('branch'));
         }
-
-        // جلب النتائج مع العلاقات (اختياري)
+       
+        $perPage = $httpRequest->input('per_page', 10);
+        
         $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city'])
-                         ->paginate(10);
-
-        return response()->json($requests);
+                         ->paginate($perPage);
+    
+        return RequestResource::collection($requests);
     }
 
 

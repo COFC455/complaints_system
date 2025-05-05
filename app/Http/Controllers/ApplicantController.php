@@ -21,9 +21,15 @@ class ApplicantController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $applicants = Applicant::paginate(10);
+        // تحديد عدد العناصر في الصفحة (القيمة الافتراضية: 10)
+        $perPage = $request->input('per_page', 10);
+    
+        // الحصول على البيانات مع التصفح
+        $applicants = Applicant::paginate($perPage);
+    
+        // إعادة النتائج مع تنسيق الـ Resource
         return ApplicantResource::collection($applicants)->response();
     }
 

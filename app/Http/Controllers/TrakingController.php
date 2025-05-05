@@ -18,9 +18,10 @@ class TrakingController extends Controller
     }
 
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $trackings = Tracking::with([ 'requests','updatedByUser','request_status'])->paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $trackings = Tracking::with(['requests','updatedByUser','request_status'])->paginate($perPage);
         return TrakingResource::collection($trackings)->response();
     }
 

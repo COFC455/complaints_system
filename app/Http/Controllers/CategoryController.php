@@ -23,9 +23,10 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $categories = Category::paginate(10);
+        $perPage = $request->input('per_page', 10);
+        $categories = Category::paginate($perPage);
         return CategoryResource::collection($categories)->response();
     }
 
