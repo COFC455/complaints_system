@@ -23,14 +23,14 @@ class RequestTypeStore extends FormRequest
     public function rules(): array
     {
         return [
-            'type_name' => 'required|in:Report,Grievance,Complaints,Suggestion,Enquiry,Tribute',
+            'type_name' => 'required|in:إبلاغ,تظلم,شكوى,اقتراح,استفسار,ثناء',
             'description' => 'required|max:500'
         ];
     }
 
     public function messages(){
         return [
-            'type_name.in'    => 'type name field must be Report,Grievance,Complaints,Suggestion,Enquiry or Tribute ',
+            'type_name.in' => 'حقل نوع الطلب يجب أن يكون واحدًا من: إبلاغ، تظلم، شكوى، اقتراح، استفسار أو ثناء',
         ];
     }
 }

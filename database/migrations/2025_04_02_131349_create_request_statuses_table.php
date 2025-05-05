@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('request_statuses', function (Blueprint $table) {
             $table->id();
-            $table->enum('status_name', ['Processing', 'Resolved', 'Urgent', 'Pending'])->default('Pending');
+            $table->enum('status_name', ['قيد المعالجة', 'تم الحل','عاجلة','قيد الانتظار','متوقفة','ملغية'])->default('قيد المعالجة');
             $table->text('description');
             $table->timestamps();
         });

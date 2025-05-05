@@ -14,13 +14,18 @@ class TrackingSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('trackings')->insert([
-            'request_id' => 1,
-            'updated_by' => 1,
-            'request_status_id' => 1,
-            'comment' => "This is a sample request description #1. " . Str::random(100),
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $trackings = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $trackings[] = [
+                'request_id' => rand(1, 5),
+                'updated_by' => rand(1, 1),
+                'request_status_id' => DB::table('request_statuses')->inRandomOrder()->first()->id,
+                'comment' => "تحديث حالة الطلب #$i - " . Str::random(100),
+                'created_at' => now()->subHours(rand(1, 24 * 7)), // تواريخ خلال أسبوع
+                'updated_at' => now(),
+            ];
+        }
+        
+        DB::table('trackings')->insert($trackings);
     }
 }

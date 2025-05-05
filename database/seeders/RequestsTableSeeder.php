@@ -14,18 +14,23 @@ class RequestsTableSeeder extends Seeder
     public function run(): void
     {
 
-        DB::table('requests')->insert([
-            'applicant_id' => 1,
-            'category_id' => 1,
-            'branch_id' => 3,
-            'request_type_id' => 1,
-            'request_status_id' =>1 ,
-            'city_id' => 4,
-            'status' => 'active',
-            'description' => "This is a sample request description #1. " . Str::random(100),
-            'reference_code' => 'REF-' . strtoupper(Str::random(8)) . '-1',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+       $requests = [];
+for ($i = 1; $i <= 5; $i++) {
+    $requests[] = [
+        'applicant_id' => rand(1, 5), // فرضًا أن لديك 5 مقدمي طلبات
+        'category_id' => rand(1, 2), // فرضًا أن لديك 3 تصنيفات
+        'branch_id' => rand(1, 5), // فروع افتراضية
+        'request_type_id' => rand(1, 4), // أنواع الطلبات
+        'request_status_id' => rand(1, 3), // حالات الطلب
+        'city_id' => rand(1, 5), // مدن افتراضية
+        'status' => 'active',
+        'description' => "وصف الطلب رقم #$i - " . Str::random(100),
+        'reference_code' => 'REF-' . strtoupper(Str::random(8)) . "-$i",
+        'created_at' => now()->subDays(rand(1, 30)), // تواريخ عشوائية خلال آخر 30 يوم
+        'updated_at' => now(),
+    ];
+}
+
+        DB::table('requests')->insert($requests);
     }
 }

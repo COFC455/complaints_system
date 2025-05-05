@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('request_types', function (Blueprint $table) {
             $table->id();
-            $table->enum('type_name', ['Report', 'Grievance', 'Complaints', 'Suggestion', 'Enquiry', 'Tribute']);
+            $table->enum('type_name', ['إبلاغ', 'تظلم','شكوى','اقتراح','استفسار','ثناء']);
             $table->text('description');
             $table->timestamps();
         });

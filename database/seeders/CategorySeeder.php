@@ -13,11 +13,25 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('categories')->insert([
-            'category_name' => 'xxxx',
-            'description'   => 'sassassssssa asssssaaaaaaaaa',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    }
+        $categories = [
+            [
+                'category_name' => 'مشاكل مالية',
+               'description' => 'قضايا متعلقة بالمعاملات المالية، التأخير في الصرفيات، أو مشاكل الرواتب'
+            ],
+            [
+                'category_name' => 'اختلاس',
+                'description' => 'حالات سوء استخدام الأموال أو الموارد المالية بشكل غير مشروع'
+            ],
+    
+        ];
+        
+        foreach ($categories as $category) {
+            DB::table('categories')->insert([
+                'category_name' => $category['category_name'],
+                'description' => $category['description'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+}
 }

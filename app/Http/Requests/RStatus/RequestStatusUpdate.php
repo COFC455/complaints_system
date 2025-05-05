@@ -22,14 +22,14 @@ class RequestStatusUpdate extends FormRequest
     public function rules(): array
     {
         return [
-            'status_name' => 'in:Processing,Resolved,Urgent,Pending',
+            'status_name' => 'in:قيد المعالجة,تم الحل,عاجلة,فيد الانتظار,متوقفة,ملغية',
             'description' => 'nullable|max:500'
         ];
     }
 
     public function messages(){
         return [
-            'status_name.in'    => 'type name field must be Processing,Resolved,Urgent Or Pending ',
+            'status_name.in' => 'حقل حالة الطلب يجب أن يكون واحدًا من: قيد المعالجة، تم الحل، عاجلة، قيد الانتظار، متوقفة أو ملغية',
         ];
     }
 }

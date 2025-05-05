@@ -22,7 +22,7 @@ class RequestTypeUpdate extends FormRequest
     public function rules(): array
     {
         return [
-            'type_name' => 'in:Report,Grievance,Complaints,Suggestion,Enquiry,Tribute',
+            'type_name' => 'in:إبلاغ,تظلم,شكوى,اقتراح,استفسار,ثناء',
             'description' => 'nullable|max:500'
         ];
     }
@@ -30,7 +30,7 @@ class RequestTypeUpdate extends FormRequest
 
     public function messages(){
         return [
-            'type_name.in'    => 'type name field must be Report,Grievance,Complaints,Suggestion,Enquiry or Tribute ',
+            'type_name.in' => 'حقل نوع الطلب يجب أن يكون واحدًا من: إبلاغ، تظلم، شكوى، اقتراح، استفسار أو ثناء',
         ];
     }
 }

@@ -13,11 +13,42 @@ class RequestStatusSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('request_statuses')->insert([
-            'status_name' => 'Resolved',
-            'description'  => 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+
+
+        $statuses = [
+            [
+                'status_name' => 'قيد المعالجة',
+                'description' => 'الحالة الافتراضية للطلب عند إنشائه'
+            ],
+            [
+                'status_name' => 'تم الحل',
+                'description' => 'تم حل الطلب بشكل كامل'
+            ],
+            [
+                'status_name' => 'عاجلة',
+                'description' => 'حالات تحتاج تدخل فوري'
+            ],
+            [
+                'status_name' => 'قيد الانتظار',
+                'description' => 'في انتظار معلومات إضافية'
+            ],
+            [
+                'status_name' => 'متوقفة',
+                'description' => 'تم إيقاف العمل على الطلب مؤقتًا'
+            ],
+            [
+                'status_name' => 'ملغية',
+                'description' => 'تم إلغاء الطلب نهائيًا'
+            ]
+        ];
+        
+        foreach ($statuses as $status) {
+            DB::table('request_statuses')->insert([
+                'status_name' => $status['status_name'],
+                'description' => $status['description'],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

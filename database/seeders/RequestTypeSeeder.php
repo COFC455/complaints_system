@@ -13,11 +13,40 @@ class RequestTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('request_types')->insert([
-            'type_name' => 'Grievance',
-            'description'  => 'Lorem ipsum is a dummy or placeholder text commonly used in graphic design, publishing, and web development',
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+      
+
+        $types = [
+            [
+                'type_name' => 'إبلاغ',
+                'description' => 'الإبلاغ عن مشكلة أو حالة طارئة'
+            ],
+            [
+                'type_name' => 'تظلم',
+                'description' => 'تقديم تظلم أو اعتراض رسمي'
+            ],
+            [
+                'type_name' => 'شكوى',
+                'description' => 'تقديم شكوى أو ملاحظة سلبية'
+            ],
+            [
+                'type_name' => 'ثناء',
+                'description' => 'تقديم إشادة أو تعليق إيجابي عن خدمة أو أداء'
+            ],
+            [
+                'type_name' => 'اقتراح',
+                'description' => 'تقديم فكرة أو مقترح لتحسين خدمة أو عملية معينة'
+            ],
+            [
+                'type_name' => 'استفسار',
+                'description' => 'طلب معلومات أو توضيح حول خدمة أو إجراء معين'
+            ]
+        ];
+    
+        foreach ($types as $type) {
+            DB::table('request_types')->insert(array_merge($type, [
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]));
+        }
     }
 }
