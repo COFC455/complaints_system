@@ -23,6 +23,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+    Route::get('users', 'index');
+    Route::get('/users/{id}','show');
+    Route::post('store', 'store');
+    Route::put('/edit/{id}', 'update');
+    Route::delete('/delete/{id}', 'destroy');
+
 
 });
 
