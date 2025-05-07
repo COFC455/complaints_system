@@ -59,8 +59,11 @@ class RequestController extends Controller
         
         $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city'])
                          ->paginate($perPage);
-    
-        return RequestResource::collection($requests);
+
+                         
+
+        return response()->json($requests);
+
     }
 
 

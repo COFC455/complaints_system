@@ -22,6 +22,7 @@ class CityController extends Controller
     {
         $perPage = $request->input('per_page', 10);
         $cities = City::paginate($perPage);
+
         return CityResource::collection($cities)->response();
     }
 
