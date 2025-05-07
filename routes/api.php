@@ -65,14 +65,13 @@ Route::get('requests/resolved/count', [RequestController::class, 'getResolvedCou
 //applicants
 Route::apiResource('applicants', ApplicantController::class);
 
-//categories
-Route::apiResource('categories', CategoryController::class);
+
 
 //categories
 Route::apiResource('categories', CategoryController::class);
 
 //Branch
-Route::apiResource('branches', BranchControApplicantControllerller::class);
+Route::apiResource('branches', BranchController::class);
 
 //RequestTypes
 Route::apiResource('requestTypes', RequestTypeController::class);
