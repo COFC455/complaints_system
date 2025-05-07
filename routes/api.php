@@ -62,6 +62,12 @@ Route::get('requests/resolved/count', [RequestController::class, 'getResolvedCou
 
 /*-------------------------------------------------------------------------------------------------------------*/
 
+//applicants
+Route::apiResource('applicants', ApplicantController::class);
+
+//categories
+Route::apiResource('categories', CategoryController::class);
+
 //categories
 Route::apiResource('categories', CategoryController::class);
 
