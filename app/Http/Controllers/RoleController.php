@@ -21,6 +21,14 @@ class RoleController extends Controller
        return RoleResource::collection($roles)->response();
     }
 
+        //get roles without paginate
+        public function getRoleWithoutPaginate(): JsonResponse
+        {
+            $roles = Role::all();
+            return RoleResource::collection($roles)->response();        
+        }
+ 
+
     /**
      * Store a newly created resource in storage.
      */

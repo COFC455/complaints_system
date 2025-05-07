@@ -16,7 +16,7 @@ class RequestTypeController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api',['except' => ['index','show']]);
+        $this->middleware('auth:api',['except' => ['index','show', 'getrequestTypeWithoutPaginate']]);
     }
 
 
@@ -30,6 +30,13 @@ class RequestTypeController extends Controller
        return RequestTypeResource::collection($request_types)->response();
 
     }
+
+        //get requestTypes without paginate
+        public function getrequestTypeWithoutPaginate(): JsonResponse
+        {  
+            $request_types = request_types::all();
+            return RequestTypeResource::collection($request_types)->response();   
+        }
 
     /**
      * Store a newly created resource in storage.

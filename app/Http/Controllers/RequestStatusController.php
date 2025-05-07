@@ -13,7 +13,7 @@ use App\Http\Resources\RStatus\RequestStatusResource;
 class RequestStatusController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth:api', ['except' => ['index' , 'show']]);
+        $this->middleware('auth:api', ['except' => ['index' , 'show', 'getrequestStatusWithoutPaginate']]);
     }
   
 
@@ -23,6 +23,14 @@ class RequestStatusController extends Controller
         $request_statues = RequestStatus::paginate($perPage);
 
         return RequestStatusResource::collection($request_statues)->response();
+    }
+
+    //get status without paginate 
+
+    public function getrequestStatusWithoutPaginate(): JsonResponse
+    {
+        $request_status = RequestStatus::all();
+        return RequestStatusResource::collection($request_status)->response();
     }
 
     /**

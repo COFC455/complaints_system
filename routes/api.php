@@ -32,14 +32,41 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
-//applicants
-Route::apiResource('applicants', ApplicantController::class);
+//get all branches without paginate
+Route::get('branches/withoutPaginate', [BranchController::class , 'getBranchesWithoutPaginate']);
+
+//get types request without paginate
+Route::get('requestTypes/withoutPaginate', [RequestTypeController::class , 'getrequestTypeWithoutPaginate']);
+
+//get all status request without paginate
+Route::get('requestStatus/withoutPaginate', [RequestStatusController::class, 'getrequestStatusWithoutPaginate']);
+
+//get all cities without paginate
+Route::get('cities/withoutPaginate', [CityController::class , 'getCitiessWithoutPaginate']);
+
+//get all categories without paginate
+Route::get('categories/withoutPaginate', [CategoryController::class , 'getcategoryWithoutPaginate']);
+
+//get all roles without paginate
+Route::get('roles/withoutPaginate', [RoleController::class , 'getRoleWithoutPaginate']);
+
+
+//get Count Of Request
+Route::get('requests/total', [RequestController::class, 'getTotalRequests']);
+
+//get count request type complaints
+Route::get('requests/complaints/count', [RequestController::class, 'getComplaintsCount']);
+
+//get count request  resolved status
+Route::get('requests/resolved/count', [RequestController::class, 'getResolvedCount']);
+
+/*-------------------------------------------------------------------------------------------------------------*/
 
 //categories
 Route::apiResource('categories', CategoryController::class);
 
 //Branch
-Route::apiResource('branches', BranchController::class);
+Route::apiResource('branches', BranchControApplicantControllerller::class);
 
 //RequestTypes
 Route::apiResource('requestTypes', RequestTypeController::class);
@@ -75,3 +102,5 @@ Route::post('/requestOnly', [RequestController::class, 'storeOnly']);
 
 //city
 Route::apiResource('cities', CityController::class);
+
+

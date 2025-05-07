@@ -17,7 +17,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api',['except' => ['index','show']]);
+        $this->middleware('auth:api',['except' => ['index','show', 'getcategoryWithoutPaginate']]);
     }
 
     /**
@@ -29,6 +29,13 @@ class CategoryController extends Controller
         $categories = Category::paginate($perPage);
         return CategoryResource::collection($categories)->response();
     }
+
+       //get categories without paginate
+       public function getcategoryWithoutPaginate(): JsonResponse
+       {
+           $categories = Category::all();
+           return CategoryResource::collection($categories)->response();        
+       }
 
     /**
      * Store a newly created resource in storage.

@@ -14,7 +14,7 @@ class CityController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api',['except' => ['index','show']]);
+        $this->middleware('auth:api',['except' => ['index','show', 'getCitiessWithoutPaginate']]);
     }
 
 
@@ -25,6 +25,13 @@ class CityController extends Controller
 
         return CityResource::collection($cities)->response();
     }
+
+       //get cities without paginate
+       public function getCitiessWithoutPaginate(): JsonResponse
+       {
+           $cities = City::all();
+           return CityResource::collection($cities)->response();        
+       }
 
     /**
      * Store a newly created resource in storage.

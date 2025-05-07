@@ -15,7 +15,7 @@ class BranchController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api',['except' => ['index','show','store']]);
+        $this->middleware('auth:api',['except' => ['index','show','store','getBranchesWithoutPaginate']]);
     }
 
    /**
@@ -29,9 +29,14 @@ class BranchController extends Controller
         return BranchResource::collection($branchs)->response();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    //get branches without paginate
+    public function getBranchesWithoutPaginate(): JsonResponse
+    {
+        
+        $branchs = Branche::all();
+        return BranchResource::collection($branchs)->response();
+        
+    }
 
     public function store(StoreBranchRequest $request): JsonResponse
     {
