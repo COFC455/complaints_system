@@ -224,7 +224,7 @@ return [
     'status_name' => 'الحالة', 
     'comment' => 'التعليقات',
     'updated_by' => 'المستخدم الذي قام بالتعديل',
-    'request_id' => 'رقم امعرف الطلب', 
+    'request_id' => 'رقم معرف الطلب', 
     'request_status_id' => 'رقم معرف حالة الطلب', 
     'type_name' => 'نوع الطلب', 
     

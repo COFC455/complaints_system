@@ -349,8 +349,8 @@ class RequestController extends Controller
         if (!$request) {
             return response()->json([
                 'success' => false,
-                'message' => 'Request not found'
-            ], 404);
+                'message' => 'لم يتم العثور على أي طلبات'
+            ], 200);
         }
 
         return response()->json([

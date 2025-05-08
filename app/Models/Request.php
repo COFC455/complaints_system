@@ -70,4 +70,10 @@ public function applicant_attachments(): HasMany
     return $this->hasMany(ApplicantAttachment::class);
 }
 
+//SysyemFiles
+public function systemFiles(): HasMany
+{
+    return $this->hasMany(SystemAttachment::class);
+}
+
 }

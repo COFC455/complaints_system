@@ -13,6 +13,7 @@ use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\RequestTypeController;
 use App\Http\Controllers\RequestStatusController;
+use App\Http\Controllers\SystemFileController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -109,3 +110,5 @@ Route::post('/requestOnly', [RequestController::class, 'storeOnly']);
 Route::apiResource('cities', CityController::class);
 
 
+Route::post('systemFiles/{request_id}', [SystemFileController::class, 'store']);
+Route::apiResource('systemFiles', SystemFileController::class);
