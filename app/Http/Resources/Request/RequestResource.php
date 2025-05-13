@@ -31,6 +31,11 @@ class RequestResource extends JsonResource
             'id' => $this->branch->id ?? null,
             'name' => $this->branch->branch_name ?? 'غير محدد',
         ],
+        //المستخدم
+        'user' => [
+            'id' => $this->user->id ?? null,
+            'name' => $this->user->name ?? 'غير محدد',
+        ],
         // المحافظة
         'city' => [
             'id' => $this->city->id ?? null,
@@ -70,6 +75,7 @@ class RequestResource extends JsonResource
         }) ?? [],
             'description' => $this->description,
             'reference_code' => $this->reference_code,
+            'is_received'    => $this->is_received,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }

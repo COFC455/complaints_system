@@ -23,10 +23,11 @@ for ($i = 1; $i <= 5; $i++) {
         'request_type_id' => rand(1, 4), // أنواع الطلبات
         'request_status_id' => rand(1, 3), // حالات الطلب
         'city_id' => rand(1, 5), // مدن افتراضية
-        'user_id' => rand(1, 5), 
+        'user_id' => rand(1, 1),
         'status' => 'active',
         'description' => "وصف الطلب رقم #$i - " . Str::random(100),
         'reference_code' => 'REF-' . strtoupper(Str::random(8)) . "-$i",
+        'is_received' => rand(0, 0),
         'created_at' => now()->subDays(rand(1, 30)), // تواريخ عشوائية خلال آخر 30 يوم
         'updated_at' => now(),
     ];

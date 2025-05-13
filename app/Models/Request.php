@@ -18,7 +18,9 @@ class Request extends Model
         'city_id',
         'status',
         'description',
-        'reference_code'
+        'concerned_entities',
+        'reference_code',
+        'is_received'
     ];
 
 

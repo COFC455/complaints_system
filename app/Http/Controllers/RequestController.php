@@ -54,13 +54,13 @@ class RequestController extends Controller
          if ($httpRequest->has('branch')) {
             $query->where('branch_id', $httpRequest->input('branch'));
         }
-       
+
         $perPage = $httpRequest->input('per_page', 10);
-        
+
         $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city'])
                          ->paginate($perPage);
 
-                         
+
 
         return response()->json($requests);
 
@@ -85,17 +85,17 @@ class RequestController extends Controller
         {
             // البحث عن ID نوع "شكوى"
             $complaintType = request_types::where('type_name', 'شكوى')->first();
-        
+
             if (!$complaintType) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'نوع الطلب "شكوى" غير موجود'
                 ], 404);
             }
-        
+
             // حساب عدد الطلبات من نوع شكوى
             $count = RequestModel::where('request_type_id', $complaintType->id)->count();
-        
+
             return response()->json([
                 'status' => 'success',
                 'complaints_count' => $count
@@ -106,19 +106,19 @@ class RequestController extends Controller
           //get count request status = Resolved
           public function getResolvedCount(): JsonResponse
           {
-             
+
               $StatusType = RequestStatus::where('status_name', 'تم الحل')->first();
-          
+
               if (!$StatusType) {
                   return response()->json([
                       'status' => 'error',
                       'message' => 'حالة الطلب "تم الحل" غير موجود'
                   ], 404);
               }
-          
+
               // حساب عدد الطلبات من نوع شكوى
               $count = RequestModel::where('request_status_id', $StatusType->id)->count();
-          
+
               return response()->json([
                   'status' => 'success',
                   'Resolved_count' => $count
@@ -158,7 +158,7 @@ class RequestController extends Controller
                 // بيانات الطلب (requests)
                 'request.category_id' => 'required|exists:categories,id',
                 'request.branch_id' => 'required|exists:branches,id',
-                'request.user_id' => 'required|exists:users,id',
+                'request.user_id' => 'exists:users,id',
                 'request.request_type_id' => 'required|exists:request_types,id',
                 'request.request_status_id' => 'required|exists:request_statuses,id',
                 'request.city_id' => 'required|exists:cities,id',
@@ -175,13 +175,13 @@ class RequestController extends Controller
 
             // 2. حفظ بيانات الطلب
             $requestData = $applicant->requests()->create($jsonData['request']);
-    
+
             // 3. حفظ المرفقات إذا وجدت
             if ($request->hasFile('attachments')) {
                 foreach ($request->file('attachments') as $file) {
                     $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
                     $filePath = $file->storeAs('attachments', $fileName, 'public');
-    
+
                     ApplicantAttachment::create([
                         'applicant_id' => $applicant->id,
                         'request_id' => $requestData->id,
@@ -189,7 +189,7 @@ class RequestController extends Controller
                     ]);
                 }
             }
-    
+
             // جلب البيانات مع العلاقات
             $requestWithRelations = RequestModel::with([
                 'applicant',
@@ -199,18 +199,18 @@ class RequestController extends Controller
                 'request_status',
                 'applicant_attachments'
             ])->findOrFail($requestData->id);
-    
+
             // إتمام المعاملة بنجاح
             \DB::commit();
-    
+
             return (new RequestResource($requestWithRelations))
                 ->response()
                 ->setStatusCode(201);
-    
+
         } catch (\Exception $e) {
             // التراجع عن المعاملة في حالة الخطأ
             \DB::rollBack();
-            
+
             return response()->json([
                 'error' => 'فشل في إنشاء الطلب: ' . $e->getMessage(),
             ], 500);
@@ -226,65 +226,65 @@ class RequestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(RequestUpdate $request, string $id): JsonResponse
+    public function update(RequestUpdate $request, $id): JsonResponse
     {
 
-        $existingRequest = RequestModel::with('applicant_attachments')->findOrFail($id);
+        \DB::beginTransaction();
+        try {
+            $requestModel = RequestModel::findOrFail($id);
+            // الحصول على البيانات المفحوصة
+            $validated = $request->validated();
 
-        // 1. تحديث بيانات مقدم الطلب (Applicant)
-        $existingRequest->applicant->update($request->input('applicant'));
-
-        // 2. تحديث بيانات الطلب (Request)
-        $existingRequest->update([
-            'category_id' => $request->input('request.category_id'),
-            'branch_id' => $request->input('request.branch_id'),
-            'request_type_id' => $request->input('request.request_type_id'),
-            'request_status_id' => $request->input('request.request_status_id'),
-            'description' => $request->input('request.description'),
-            'reference_code' => $request->input('request.reference_code'),
-        ]);
-
-         // 3. حذف المرفقات القديمة والملفات المرتبطة بها
-        if ($existingRequest->applicant_attachments->isNotEmpty()) {
-            foreach ($existingRequest->applicant_attachments as $attachment) {
-                // حذف الملف من التخزين
-                Storage::disk('public')->delete($attachment->file_path);
-                // حذف السجل من قاعدة البيانات
-                $attachment->delete();
+            // تحديث بيانات مقدم الطلب إذا أُرسلت
+            if (isset($validated['applicant'])) {
+                $requestModel->applicant->update($validated['applicant']);
             }
-        }
 
-         // 4. حفظ المرفقات الجديدة
-            try {
-                if ($request->hasFile('attachments')) {
-                    foreach ($request->file('attachments') as $file) {
-                        $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
-                        $filePath = $file->storeAs('attachments', $fileName, 'public');
+            // تحديث بيانات الطلب إذا أُرسلت
+            if (isset($validated['request'])) {
+                $requestModel->update($validated['request']);
+            }
 
-                        ApplicantAttachment::create([
-                            'applicant_id' => $existingRequest->applicant->id,
-                            'request_id' => $existingRequest->id,
-                            'file_path' => $filePath,
-                        ]);
-                    }
+            // معالجة المرفقات الجديدة
+            if ($request->hasFile('attachments')) {
+                // حذف المرفقات القديمة (اختياري)
+                ApplicantAttachment::where('request_id', $requestModel->id)->delete();
+
+                foreach ($request->file('attachments') as $file) {
+                    $fileName = Str::uuid() . '.' . $file->getClientOriginalExtension();
+                    $filePath = $file->storeAs('attachments', $fileName, 'public');
+
+                    ApplicantAttachment::create([
+                        'applicant_id' => $requestModel->applicant_id,
+                        'request_id' => $requestModel->id,
+                        'file_path' => $filePath,
+                    ]);
                 }
-            } catch (\Exception $e) {
-                return response()->json([
-                    'error' => 'فشل في تحميل الملفات: ' . $e->getMessage(),
-                ], 500);
             }
 
-
-            $updatedRequest = Request::with([
+            // جلب البيانات المحدثة مع العلاقات
+            $updatedRequest = RequestModel::with([
                 'applicant',
                 'category',
                 'branch',
                 'request_type',
                 'request_status',
                 'applicant_attachments'
-            ])->find($existingRequest->id);
+            ])->findOrFail($requestModel->id);
 
-        return (new RequestResource($updatedRequest))->response()->setStatusCode(200);
+            \DB::commit();
+
+            return (new RequestResource($updatedRequest))
+                ->response()
+                ->setStatusCode(200);
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+
+            return response()->json([
+                'error' => 'فشل في تحديث الطلب: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
 
