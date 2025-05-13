@@ -16,11 +16,13 @@ return new class extends Migration
             $table->foreignId('applicant_id')->constrained('applicants')->onDelete('cascade');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('request_type_id')->constrained('request_types')->onDelete('cascade');
             $table->foreignId('request_status_id')->constrained('request_statuses')->onDelete('cascade');
             $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->text('description');
+            $table->enum('concerned_entities', ['الجهاز المركزي', 'غير ذلك'])->default('غير ذلك');
             $table->string('reference_code', 50);
             $table->timestamps();
         });

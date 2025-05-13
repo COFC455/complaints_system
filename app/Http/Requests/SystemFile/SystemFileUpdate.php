@@ -5,7 +5,7 @@ namespace App\Http\Requests\SystemFile;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SystemFileStore extends FormRequest
+class SystemFileUpdate extends FormRequest
 {
     public function authorize(): bool
     {
@@ -15,9 +15,9 @@ class SystemFileStore extends FormRequest
     public function rules(): array
     {
         return [
-            'systemFiles' => 'required|array',
+            'systemFiles' => 'sometimes|array',
             'systemFiles.*' => [
-                'required',
+                'sometimes',
                 'file',
                 'mimes:pdf,jpg,png,jpeg',
                 'max:10240' // 10MB
@@ -28,8 +28,6 @@ class SystemFileStore extends FormRequest
     public function messages(): array
     {
         return [
-            'systemFiles.required' => 'يجب رفع ملف واحد على الأقل',
-            'systemFiles.*.required' => 'الملف مطلوب',
             'systemFiles.*.file' => 'القيمة يجب أن تكون ملفًا',
             'systemFiles.*.mimes' => 'نوع الملف غير مسموح به. المسموح: :values',
             'systemFiles.*.max' => 'الحد الأقصى لحجم الملف: 10 ميجابايت'

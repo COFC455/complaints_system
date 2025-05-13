@@ -58,7 +58,7 @@ class RequestUpdate extends FormRequest
             'request.reference_code' => 'sometimes|max:50',
 
             // المرفقات (attachments) - اختيارية في التحديث
-            'attachments.*' => 'sometimes|file|mimes:pdf,jpg,png|max:2048',
+            'attachments.*' => 'sometimes|file|mimes:pdf,jpg,png|max:10240',
         ];
 }
 

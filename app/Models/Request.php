@@ -12,6 +12,7 @@ class Request extends Model
         'applicant_id',
         'category_id',
         'branch_id',
+        'user_id',
         'request_type_id',
         'request_status_id',
         'city_id',
@@ -70,10 +71,18 @@ public function applicant_attachments(): HasMany
     return $this->hasMany(ApplicantAttachment::class);
 }
 
-//SysyemFiles
-public function systemFiles(): HasMany
-{
-    return $this->hasMany(SystemAttachment::class);
-}
+    //SysyemFiles
+    public function systemFiles(): HasMany
+    {
+        return $this->hasMany(SystemAttachment::class);
+    }
+
+
+    //users
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
 }

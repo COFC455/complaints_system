@@ -96,10 +96,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Role::class , 'role_id' , 'id');
     }
 
-  //SysyemFiles
+    //SysyemFiles
     public function systemFiles(): HasMany
     {
-    return $this->hasMany(SystemAttachment::class);
+         return $this->hasMany(SystemAttachment::class);
+    }
+
+     public function requests(): HasMany
+    {
+        return $this->hasMany(Request::class);
     }
 
 

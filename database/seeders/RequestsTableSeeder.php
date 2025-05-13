@@ -23,6 +23,7 @@ for ($i = 1; $i <= 5; $i++) {
         'request_type_id' => rand(1, 4), // أنواع الطلبات
         'request_status_id' => rand(1, 3), // حالات الطلب
         'city_id' => rand(1, 5), // مدن افتراضية
+        'user_id' => rand(1, 5), 
         'status' => 'active',
         'description' => "وصف الطلب رقم #$i - " . Str::random(100),
         'reference_code' => 'REF-' . strtoupper(Str::random(8)) . "-$i",

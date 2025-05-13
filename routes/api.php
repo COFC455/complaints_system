@@ -111,4 +111,5 @@ Route::apiResource('cities', CityController::class);
 
 
 Route::post('systemFiles/{request_id}', [SystemFileController::class, 'store']);
-Route::apiResource('systemFiles', SystemFileController::class);
+Route::put('systemFiles/update/{request_id}', [SystemFileController::class, 'update']);
+// Route::apiResource('systemFiles', SystemFileController::class);

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SystemFile\SystemFileStore;
+use App\Http\Requests\SystemFile\{SystemFileStore,SystemFileUpdate};
 use App\Http\Resources\SystemFile\SystemFileResource;
 use App\Models\SystemAttachment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request as parentRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+
 
 class SystemFileController extends Controller
 {
@@ -81,9 +82,22 @@ class SystemFileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SystemFileUpdate $request, $request_id)
     {
-        //
+        
+       $systemAttachments = SystemAttachment::findOrFail($request_id)->get();
+       
+       if($request->hasFile('systemFiles')) {
+            foreach($systemAttachments as $attachment){
+
+                    Storage::disk('public')->delete($attachment->file_path);
+                     $attachment->delete();
+                     
+
+            } 
+       }
+
+
     }
 
     /**

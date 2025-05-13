@@ -17,7 +17,7 @@ class RequestStore extends FormRequest
 
             'data' => 'required|json',
              // المرفقات (attachments)
-             'attachments.*' => 'required|file|mimes:pdf,jpg,png|max:2048',
+             'attachments.*' => 'required|file|mimes:pdf,jpg,png|max:10240',
          ];
     }
 
