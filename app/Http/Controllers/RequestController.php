@@ -31,52 +31,60 @@ class RequestController extends Controller
 
     // }
 
-    public function index(HttpRequest $httpRequest)
-    {
-        $query = RequestModel::query();
+        public function index(HttpRequest $httpRequest)
+        {
+            $query = RequestModel::query();
 
-        // الفلترة حسب request_type (request_type_id)
-        if ($httpRequest->has('request_type')) {
-            $query->where('request_type_id', $httpRequest->input('request_type'));
+            // الفلترة حسب request_type (request_type_id)
+            if ($httpRequest->has('request_type')) {
+                $query->where('request_type_id', $httpRequest->input('request_type'));
+            }
+
+            // الفلترة حسب request_status (request_status_id)
+            if ($httpRequest->has('request_status')) {
+                $query->where('request_status_id', $httpRequest->input('request_status'));
+            }
+
+            // الفلترة حسب category (category_id)
+            if ($httpRequest->has('category')) {
+                $query->where('category_id', $httpRequest->input('category'));
+            }
+
+            // الفلترة حسب request_status (branch_id)
+            if ($httpRequest->has('branch')) {
+                $query->where('branch_id', $httpRequest->input('branch'));
+            }
+
+            //filter cocenred
+            if($httpRequest->has('concerned_entities')){
+                $query->where('concerned_entities', $httpRequest->input('concerned_entities'));
+            }
+
+
+            $perPage = $httpRequest->input('per_page', 10);
+
+            $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city','user'])
+                            ->paginate($perPage);
+
+
+
+            return response()->json($requests);
+
         }
 
-        // الفلترة حسب request_status (request_status_id)
-        if ($httpRequest->has('request_status')) {
-            $query->where('request_status_id', $httpRequest->input('request_status'));
-        }
 
-         // الفلترة حسب category (category_id)
-         if ($httpRequest->has('category')) {
-            $query->where('category_id', $httpRequest->input('category'));
-        }
-
-         // الفلترة حسب request_status (branch_id)
-         if ($httpRequest->has('branch')) {
-            $query->where('branch_id', $httpRequest->input('branch'));
-        }
-
-        $perPage = $httpRequest->input('per_page', 10);
-
-        $requests = $query->with(['applicant', 'category', 'branch', 'request_type', 'request_status', 'city'])
-                         ->paginate($perPage);
-
-
-
-        return response()->json($requests);
-
-    }
 
         //getTotalRequests
-            public function getTotalRequests(): JsonResponse
-            {
-                // حساب عدد الطلبات بدون أي فلترة
-                $totalRequests = RequestModel::count();
+        public function getTotalRequests(): JsonResponse
+        {
+            // حساب عدد الطلبات بدون أي فلترة
+            $totalRequests = RequestModel::count();
 
-                return response()->json([
-                    'status' => 'success',
-                    'total_requests' => $totalRequests
-                ]);
-            }
+            return response()->json([
+                'status' => 'success',
+                'total_requests' => $totalRequests
+            ]);
+        }
 
 
 
@@ -125,6 +133,8 @@ class RequestController extends Controller
               ]);
           }
 
+
+          
 
     public function storeOnly(StoreOnlyRequest $request): JsonResponse
     {
