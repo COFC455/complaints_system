@@ -168,7 +168,7 @@ class RequestController extends Controller
                 // بيانات الطلب (requests)
                 'request.category_id' => 'required|exists:categories,id',
                 'request.branch_id' => 'required|exists:branches,id',
-                'request.user_id' => 'exists:users,id',
+                'request.user_id' => 'nullable',
                 'request.request_type_id' => 'required|exists:request_types,id',
                 'request.request_status_id' => 'required|exists:request_statuses,id',
                 'request.city_id' => 'required|exists:cities,id',
